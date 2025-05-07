@@ -28,21 +28,37 @@ figure
 histogram(age,10)
 xrange = [60 84];
 title('AGE')
+xlabel('Age')
+ylabel('Frequency')
 
 figure
 histogram(edu,10)
 xrange = [10 25];
 title('Education')
+xlabel('Education')
+ylabel('Frequency')
+
+figure
+histogram(found4.psqi_hourssleep,20)
+xrange = [0 10]
+title('Total Sleep Time')
+xlabel('TST')
+ylabel('Frequency')
 
 figure
 histogram(sleeplat,20)
 xrange = [0 10];
 title('sleep latency')
+xlabel('Sleep Latency')
+ylabel('Frequency')
+
 
 figure 
 histogram(fgen,10)
 xrange = [0 1];
 title('Generalization Performance')
+xlabel('Generalization Performance')
+ylabel('Frequency')
 
 %%
 %Scatter plots for each variable against fgen 
@@ -81,51 +97,42 @@ disp(['Pearson Correlation (Total Sleep Time): r = ', num2str(R_tst(1, 2)), ', p
 %%
 %Conduct simple linear regression on sleep quality without covariates
 sleepqualregression = fitlm(sleepqual,fgen)
-disp(sleepqualregression)
 figure;
 plot(sleepqualregression)
 
 %Conduct simple linear regression on sleep quality and fgen with covariates
 sleepqual_data_table = table(fgen, sleepqual, age, gender, edu, faq);
 sleepqualregression2 = fitlm(sleepqual_data_table, 'fgen ~  sleepqual + age + gender + edu + faq')
-disp(sleepqualregression2)
 figure; plot (sleepqualregression2)
 %%
 %Conduct simple linear regression on sleep latency and check residual
 %distribution without covariates
-sleeplatregression = fitlm(sleeplat,fgen)
-disp(sleeplatregression) 
+sleeplatregression = fitlm(sleeplat,fgen) 
 figure; plot(sleeplatregression)
 
 %Conduct simple linear regression on sleep latency and fgen with covariates
 sleeplat_data_table = table(fgen, sleeplat, age, gender, edu, faq);
 sleeplatregression2 = fitlm(sleeplat_data_table, 'fgen ~  sleeplat + age + gender + edu + faq')
-disp(sleeplatregression2)
 figure; plot (sleeplatregression2)
 
 %%
 %Conduct simple linear regression on total sleep time and check residual
 %distribution without covariates
 tstregression = fitlm(tst,fgen)
-disp(tstregression)
 figure; plot(tstregression)
 
 %Conduct simple linear regression on sleep latency and fgen with covariates
 tst_data_table = table(tst, age,gender, edu, fgen,faq);
 tstregression2 = fitlm(tst_data_table, 'fgen ~ tst + age + gender + edu + faq')
-disp(tstregression2)
 figure; plot (tstregression2)
 
 %%
 %Conduct multiple regression on all variables without covariates
 multiplereg_table = table (fgen, tst, sleeplat, sleepqual, age, gender, edu, faq)
 multiplereg = fitlm(multiplereg_table, 'fgen ~ tst + sleeplat + sleepqual');
-disp(multiplereg)
-
 
 %Conduct multiple regression on all variables with covariates
 multiplereg_cov = fitlm(multiplereg_table, 'fgen ~ tst + sleeplat + sleepqual + age + gender + edu + faq');
-disp(multiplereg_cov)
 
 %% 
 %Run everything again without sleep latency outliers 
